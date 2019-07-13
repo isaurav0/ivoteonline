@@ -6,25 +6,27 @@ const cors = require('cors');
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const path = require('path');
+const keys = require('./config/keys')
+
 
 
 //setup express app
 const app = express();
+// app.use(bodyParser);
+app.use(bodyParser.urlencoded({ extended: false }));
 
 
-//connection to database
-mongoose.connect('mongodb://localhost/vote', { useNewUrlParser: true });
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', ()=> {
-  console.log("Connected to database ");
-});
+mongoose
+    .connect(keys.MONGO_URI, { useNewUrlParser: true })
+    .then(() => console.log("Connected to the mongoose"))
+    .catch(err => console.log(err));
 
 
 //import from routes
 const greet = require('./routes/greet');
 const login = require('./routes/login');
 const signup = require('./routes/signup');
+const dashboard = require('./routes/dashboard')
 
 //setup view engine
 app.set('views', path.join(__dirname, 'views'));
@@ -35,6 +37,7 @@ app.set('view engine', 'handlebars');
 app.use('/', greet);
 app.use('/login', login);
 app.use('/signup', signup);
+app.use('/dashboard', dashboard);
 
 //listen to app
 var port = process.env.PORT || 3000
