@@ -1,11 +1,9 @@
-const express = require('express')
+var express = require('express');
+var router = express.Router();
 
-const router = express();
-
-router.get('/', (req, res, next)=>{
-    res.render('home',{
-        title: 'Greetings'
-    });
+//Get Homepage
+router.get('/', function (req, res) {
+    res.render('greet');
 });
 
-module.exports = router ;
+module.exports = router;
