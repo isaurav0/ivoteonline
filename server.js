@@ -1,19 +1,23 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var expressHandlebars = require('express-handlebars');
-var expressValidator = require('express-validator');
-var connectFlash = require('connect-flash');
-var expressSession = require('express-session');
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/passport', { useNewUrlParser: true});
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const expressHandlebars = require('express-handlebars');
+const expressValidator = require('express-validator');
+const connectFlash = require('connect-flash');
+const expressSession = require('express-session');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const mongoose = require('mongoose');
+
+//database
+const db = require('./config/keys').MONGO_URI;
+console.log(db)
+mongoose.connect(db, { useNewUrlParser: true});
 
 
 //Init app
-var app = express();
+const app = express();
 
 //View Engine
 app.set('views', path.join(__dirname, 'views'));

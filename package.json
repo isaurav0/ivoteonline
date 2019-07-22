@@ -1,8 +1,11 @@
 {
-	"name": "node_authentication",
+	"name": "ivoteonline",
 	"version": "1.0.0",
 	"private": "true",
-	"description": "Node authentication with nodejs, expressjs, handlebarsjs and mongodb",
+	"description": "",
+	"scripts":{
+		"start": "nodemon server"
+	},
 	"dependencies": {
 		"bcryptjs": "*",
 		"body-parser": "*",
