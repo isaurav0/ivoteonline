@@ -78,9 +78,10 @@ app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 app.use('/secret', require('./routes/secret'));
 app.use('/greet', require('./routes/greet'));
+app.use('/create', require('./routes/create'));
 
 //Set Port
-app.set('port',3300);
+app.set('port',3000);
 
 mongoose.connection.on('error', function(err) {
     console.log('Mongodb is not running.');
