@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
-var bcrypt = require('bcryptjs');
 const Schema = mongoose.Schema;
+
+var candidateSchema = require('./candidate')
 
 //User Schema
 var pollSchema = new Schema({
@@ -13,22 +14,25 @@ var pollSchema = new Schema({
     },
     expireAt: {
         type: Date,
-    }
+    },
     comment: {
         type: String
     },
-    candidates: [CandidateSchema]
+    authorID: {
+        type: String
+    },
+    public: {
+        type: Boolean
+    }
+    // candidates: [candidateSchema.schema]
 }, {timestamps: true});
 
-module.exports = mongoose.model('Poll', pollSchema);
+var Poll=module.exports = mongoose.model('Poll', pollSchema);
 
 
-var CandidateSchema = new Schema ({
-    title: {
-        type: String,
-    },
-    votedBy: [{
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    }]
-})
+
+// module.exports.createPoll = function(newPoll, callback){
+//             newPoll.save(callback);
+//         });
+//     });
+// };

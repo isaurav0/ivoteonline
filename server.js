@@ -29,6 +29,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(cookieParser());
 
+//setup cookies parser
+// app.use(cookieParser)
+
 //Set statuc folder
 app.use(express.static(path.join(__dirname, 'public')));
 

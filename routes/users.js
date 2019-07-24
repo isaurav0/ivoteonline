@@ -92,10 +92,7 @@ passport.deserializeUser(function(id, done) {
 });
 
 //User Login
-router.post('/login', passport.authenticate('local', {successRedirect: '/', failureRedirect: '/users/login', failureFlash: true}), function(req, res) {
-    console.log(user.name)
-    res.redirect('/');
-});
+router.post('/login', passport.authenticate('local', {successRedirect: '/', failureRedirect: '/users/login', failureFlash: true}))
 
 //User Logout
 router.get('/logout', function (req, res, next) {
