@@ -14,6 +14,8 @@ const mongoose = require('mongoose');
 const db = require('./config/keys').MONGO_URI;
 console.log(db)
 mongoose.connect(db, { useNewUrlParser: true});
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
 
 
 //Init app

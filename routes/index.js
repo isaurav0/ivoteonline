@@ -1,11 +1,20 @@
 var express = require('express');
 var router = express.Router();
-var user = require('./users')
+var Candidate = require('../models/candidate');
+var Poll = require('../models/poll');
+var User = require('../models/user');
 
 //Get Homepage
 router.get('/', ensureAuthenticated, function (req, res) {
     res.cookie('userData',req.user);
-    res.render('index');
+    titles=[]
+    Poll.find()
+        .then(data=>{
+            console.log(data)
+            res.render('index',{data});
+        })
+        .catch(err=>console.log(err));
+
 });
 
 function ensureAuthenticated(req, res, next) {

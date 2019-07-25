@@ -1,35 +1,25 @@
-<div class="container">
+{{#each data}}
+<div class="container centered-form center-block">
     <div class="row">
-        <div class="col-md-4 col-md-offset-4">
+        <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="row">
+                        <a href='/poll/p/{{this._id}}'>
                         <div class="col-md-12 text-center">
-                            <h2>The Best IDE Ever</h2><hr>
+                            <h2>{{this.title}}</h2><hr>
                         </div>
-                        <div class="col-md-12">
-                            Let's make a nice big leafy tree. Just beat the devil out of it. We'll take a little bit of Van Dyke Brown. Just let your mind wander and enjoy. This should make you happy. Everything's not great in life, but we can still find beauty in it.
-
-I like to beat the brush. Fluff it up a little and hypnotize it. Take your time. Speed will come later.
-
-Get tough with it, get strong. No worries. No cares. Just float and wait for the wind to blow you around. Water's like me. It's laaazy ... Boy, it always looks for the easiest way to do things And maybe, maybe, maybe... That's the way I look when I get home late; black and blue. I really believe that if you practice enough you could paint the 'Mona Lisa' with a two-inch brush.
-
-Let's build some happy little clouds up here. Isn't that fantastic that you can make whole mountains in minutes? I thought today we would do a happy little picture. Just make little strokes like that.
-
-Now, we're going to fluff this cloud. If these lines aren't straight, your water's going to run right out of your painting and get your floor wet. The shadows are just like the highlights, but we're going in the opposite direction. From all of us here, I want to wish you happy painting and God bless, my friends. Be so very light. Be a gentle whisper.
-
-We have all at one time or another mixed some mud. That's a crooked tree. We'll send him to Washington. Every highlight needs it's own personal shadow.
-
-We'll put some happy little leaves here and there. Don't kill all your dark areas - you need them to show the light. If we're gonna walk though the woods, we need a little path. Let's have a happy little tree in here. All you need is a dream in your heart, and an almighty knife.
-
-
+                        </a>
+                        
                         </div>
-                        <div class="col-md-12">
-                    
+                        <div class="col-md-12 text-center">
+                            <h4>{{this.body}}</h4>
                         </div>
+                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+{{/each}}

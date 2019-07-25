@@ -5,12 +5,14 @@ const Schema = mongoose.Schema;
 var candidateSchema = new Schema ({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     votedBy: [{
         type: Schema.Types.ObjectId,
         ref: 'User',
-        default: null
+        default: null,
+        unique: true
     }],
     parentPoll: {
         type: Schema.Types.ObjectId,
