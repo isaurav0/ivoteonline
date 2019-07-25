@@ -81,9 +81,11 @@ app.use(function (req, res, next) {
 
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
-app.use('/secret', require('./routes/secret'));
+app.use('/poll', require('./routes/polls'));
 app.use('/greet', require('./routes/greet'));
 app.use('/create', require('./routes/create'));
+
+
 
 //Set Port
 app.set('port',3000);

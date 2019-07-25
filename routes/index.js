@@ -10,7 +10,7 @@ router.get('/', ensureAuthenticated, function (req, res) {
     titles=[]
     Poll.find()
         .then(data=>{
-            console.log(data)
+            // console.log(data)
             res.render('index',{data});
         })
         .catch(err=>console.log(err));
