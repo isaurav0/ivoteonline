@@ -84,7 +84,7 @@ app.use('/users', require('./routes/users'));
 app.use('/poll', require('./routes/polls'));
 app.use('/greet', require('./routes/greet'));
 app.use('/create', require('./routes/create'));
-
+app.use('/mypolls', require('./routes/mypolls'));
 
 
 //Set Port
