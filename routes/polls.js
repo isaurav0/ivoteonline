@@ -34,7 +34,7 @@ router.post('/:id/:pollid', ensureAuthenticated, (req,res)=>{
             else{
                 message = 'Your vote has been recorded! '
             }
-            res.render('result.handlebars',{message} )
+            res.render('polls.handlebars',{message} )
         })
         .catch(err=>console.log(err));
 })
