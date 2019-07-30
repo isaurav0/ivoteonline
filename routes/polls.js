@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Candidate = require('../models/candidate');
 var Poll = require('../models/poll');
+var ObjectId = require('mongoose').Types.ObjectId
 
 router.get('/:id', ensureAuthenticated, function (req, res) {
     Poll.findById(req.params.id)
@@ -13,6 +14,29 @@ router.get('/:id', ensureAuthenticated, function (req, res) {
         }
         )
         .catch(err => console.log(err))
+})
+
+router.post('/:id/:pollid', ensureAuthenticated, (req,res)=>{
+    // res.redirect('/poll/:'+req.params.id)
+    // ObjectId.fromString( req.params.id )
+    userId = new ObjectId(req.cookies['userData']._id);
+    pollId = new ObjectId(req.params.pollid);
+    candidateId = new ObjectId(req.params.id);
+    console.log(pollId);
+    Candidate.find({ parentPoll: pollId })
+        .then(candidate => {
+            console.log(candidate);
+            console.log(userId);
+            if(candidate[0].votedBy.includes(userId))
+            {
+                message = 'You cant vote'
+            }
+            else{
+                message = 'Your vote has been recorded! '
+            }
+            res.render('result.handlebars',{message} )
+        })
+        .catch(err=>console.log(err));
 })
 
 function ensureAuthenticated(req, res, next) {

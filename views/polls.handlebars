@@ -5,16 +5,19 @@
                     <div class="row">
                         <div class="col-md-12 text-center">
                             <h2>{{poll.title}}</h2><hr>
-                            <h3>{{poll.body}}</h5>
+                            <h3>{{poll.body}}</h3>
+                            
                             
                             <div class='row'>
                                 <div class="col-md-5 col-md-offset-3 text-center">
                                     <div>
                                         {{#each candidates}}
-                                            <button type="submit" id='{{this._id}}' class='btn-success pull-right' method='post'> 
+                                        <form action="/poll/{{this._id}}/{{this.parentPoll}}" method="post">
+                                            <button type="submit"  id='{{this._id}}' class='btn-success pull-right btn-block' method='post'> 
                                             <h4>{{this.name}}</h4>
                                             </button>
                                             <br><br><br>
+                                        </form>
                                         {{/each}}                                                                            
                                     </div> 
                                 </div>
@@ -24,8 +27,9 @@
                         </div>
                         
                         </div>
-                        
-                        
+                        {{#if voted}}
+                        <p>Your vote has been casted. </p>
+                        {{/if}}
                     </div>
                 </div>
             </div>
