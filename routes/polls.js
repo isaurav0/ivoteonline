@@ -2,42 +2,73 @@ var express = require('express');
 var router = express.Router();
 var Candidate = require('../models/candidate');
 var Poll = require('../models/poll');
-var ObjectId = require('mongoose').Types.ObjectId
+var ObjectId = require('mongoose').Types.ObjectId;
+
 
 router.get('/:id', ensureAuthenticated, function (req, res) {
     Poll.findById(req.params.id)
         .then(poll => {
             Candidate.find({ parentPoll: poll._id }, (err, candidates) => {
                 if (err) console.log(err);
-                res.render('polls.handlebars',{poll, candidates});
+                res.render('polls.handlebars', { poll, candidates });
             })
         }
         )
         .catch(err => console.log(err))
-})
+});
 
-router.post('/:id/:pollid', ensureAuthenticated, (req,res)=>{
+router.post('/:pollid/:candid', ensureAuthenticated, (req, res) => {
     // res.redirect('/poll/:'+req.params.id)
     // ObjectId.fromString( req.params.id )
+    
     userId = new ObjectId(req.cookies['userData']._id);
+    console.log(userId)
     pollId = new ObjectId(req.params.pollid);
-    candidateId = new ObjectId(req.params.id);
+    candidateId = new ObjectId(req.params.candid);
     console.log(pollId);
     Candidate.find({ parentPoll: pollId })
         .then(candidate => {
-            console.log(candidate);
-            console.log(userId);
-            if(candidate[0].votedBy.includes(userId))
-            {
-                message = 'You cant vote'
+            voted=false;
+            var message = null;
+            for (i in candidate) {
+                console.log(candidate[i]);
+                if (candidate[i].votedBy.includes(userId)) {
+                    message = 'You cant vote';
+                    console.log('radi ka baan');
+                    voted = true;
+                    // res.redirect('/' + pollId);
+                }
             }
-            else{
-                message = 'Your vote has been recorded! '
+            if(!voted){
+                console.log('not voted')
+                Candidate.findOne({'_id': candidateId})
+                .then(cand => {
+                    var name = cand.name;
+                    console.log(cand.name)
+                    message='You voted '+cand.name;
+                    console.log(message);
+                    res.send(message);
+                    
+                })
+                .catch(err => { console.log(err); })
             }
-            res.render('polls.handlebars',{message} )
+            // res.send(message);
+            // console.log(message)
+            
+            
+            // console.log(candidate.votedBy);
+            // console.log(userId);
+
+            // if(!voted){
+                // Candidate.findOneAndUpdate({ _id: candidateId }, { $push:{'votedBy': userId }}, () => { console.log('recorded') });
+            //     message = 'Your vote has been recorded! ';
+            // }
+            // console.log(message);
         })
-        .catch(err=>console.log(err));
-})
+        .catch(err => console.log(err));
+    
+
+});
 
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
