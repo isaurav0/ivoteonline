@@ -14,8 +14,11 @@
                                         {{#each candidates}}
                                         {{!-- <form action="/poll/{{this.parentPoll}}/{{this._id}}" method="post"> --}}
                                             {{!-- <button type="submit"  id='{{this._id}}' class='btn-success pull-right btn-block' method='post'>  --}}
-                                            <h4>{{this.name}}</h4>
-                                            <h2>{{this.votedBy}}</h2>
+                                            
+                                            <div>
+                                                <h4>{{this.name}}</h4>
+                                            </div>
+                                            <h2>{{this.percent}}%</h2>
                                             {{!-- </button> --}}
                                             <br><br><br>
                                         {{!-- </form> --}}

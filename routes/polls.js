@@ -20,10 +20,19 @@ router.get('/:pollid', ensureAuthenticated, (req, res) => {
                         voted = true;
                     }
                 }
-                if(voted){
+                if (voted) {
+                    var totalvotes = 0
+                    for (i in candidates) {
+                        totalvotes += candidates[i].votedBy.length
+                    }
+
+                    for (i in candidates) {
+                        candidates[i].percent = candidates[i].votedBy.length / totalvotes * 100;
+                    }
+
                     res.render('result.handlebars', { poll, candidates });
                 }
-                else{
+                else {
                     res.render('polls.handlebars', { poll, candidates });
                 }
             })
@@ -47,17 +56,26 @@ router.post('/:pollid/:candid', ensureAuthenticated, (req, res) => {
                     voted = true;
                 }
             }
-            if(!voted){
+            if (!voted) {
                 Candidate.findOneAndUpdate({ _id: candidateId }, { $push: { 'votedBy': userId } }, (err, cand) => {
                     message = 'You voted ' + cand.name;
                     console.log(message)
                 });
                 console.log('vote casted')
             }
-                
+
             Poll.findById(pollId)
                 .then(poll => {
                     Candidate.find({ parentPoll: poll._id }, (err, candidates) => {
+                        var totalvotes = 0
+                        for (i in candidates) {
+                            totalvotes += candidates[i].votedBy.length
+                        }
+
+                        for (i in candidates) {
+                            candidates[i].percent = candidates[i].votedBy.length / totalvotes * 100;
+                        }
+
                         if (err) console.log(err);
                         res.render('result.handlebars', { poll, candidates });
                     })
@@ -67,24 +85,6 @@ router.post('/:pollid/:candid', ensureAuthenticated, (req, res) => {
         })
         .catch(err => console.log(err));
 });
-
-function voted(pollId, userId) {
-    Candidate.find({ parentPoll: pollId })
-        .then(candidate => {
-            for (i in candidate) {
-                if (candidate[i].votedBy.includes(userId)) {
-                    console.log('inelligible to vote! ')
-                    return true;
-                    
-                }
-            }
-            console.log('you can caste vote! ')
-            return false;
-        })
-        .catch(err => { return err })
-}
-
-
 
 
 function ensureAuthenticated(req, res, next) {
@@ -96,3 +96,19 @@ function ensureAuthenticated(req, res, next) {
     }
 }
 module.exports = router;
+
+// function voted(pollId, userId) {
+//     Candidate.find({ parentPoll: pollId })
+//         .then(candidate => {
+//             for (i in candidate) {
+//                 if (candidate[i].votedBy.includes(userId)) {
+//                     console.log('inelligible to vote! ')
+//                     return true;
+
+//                 }
+//             }
+//             console.log('you can caste vote! ')
+//             return false;
+//         })
+//         .catch(err => { return err })
+// }
