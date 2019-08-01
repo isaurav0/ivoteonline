@@ -5,70 +5,87 @@ var Poll = require('../models/poll');
 var ObjectId = require('mongoose').Types.ObjectId;
 
 
-router.get('/:id', ensureAuthenticated, function (req, res) {
-    Poll.findById(req.params.id)
+
+router.get('/:pollid', ensureAuthenticated, (req, res) => {
+    userId = new ObjectId(req.cookies['userData']._id);
+    pollId = new ObjectId(req.params.pollid);
+    Poll.findById(pollId)
         .then(poll => {
             Candidate.find({ parentPoll: poll._id }, (err, candidates) => {
                 if (err) console.log(err);
-                res.render('polls.handlebars', { poll, candidates });
+                var voted = false;
+                for (i in candidates) {
+                    if (candidates[i].votedBy.includes(userId)) {
+                        console.log('inelligible to vote! ')
+                        voted = true;
+                    }
+                }
+                if(voted){
+                    res.render('result.handlebars', { poll, candidates });
+                }
+                else{
+                    res.render('polls.handlebars', { poll, candidates });
+                }
             })
         }
         )
         .catch(err => console.log(err))
-});
+})
 
 router.post('/:pollid/:candid', ensureAuthenticated, (req, res) => {
-    // res.redirect('/poll/:'+req.params.id)
-    // ObjectId.fromString( req.params.id )
-    
     userId = new ObjectId(req.cookies['userData']._id);
-    console.log(userId)
     pollId = new ObjectId(req.params.pollid);
     candidateId = new ObjectId(req.params.candid);
-    console.log(pollId);
+
+
     Candidate.find({ parentPoll: pollId })
         .then(candidate => {
-            voted=false;
-            var message = null;
+            var voted = false;
             for (i in candidate) {
-                console.log(candidate[i]);
                 if (candidate[i].votedBy.includes(userId)) {
-                    message = 'You cant vote';
-                    console.log('radi ka baan');
+                    console.log('inelligible to vote! ')
                     voted = true;
-                    // res.redirect('/' + pollId);
                 }
             }
             if(!voted){
-                console.log('not voted')
-                Candidate.findOne({'_id': candidateId})
-                .then(cand => {
-                    var name = cand.name;
-                    console.log(cand.name)
-                    message='You voted '+cand.name;
-                    console.log(message);
-                    res.send(message);
-                    
-                })
-                .catch(err => { console.log(err); })
+                Candidate.findOneAndUpdate({ _id: candidateId }, { $push: { 'votedBy': userId } }, (err, cand) => {
+                    message = 'You voted ' + cand.name;
+                    console.log(message)
+                });
+                console.log('vote casted')
             }
-            // res.send(message);
-            // console.log(message)
-            
-            
-            // console.log(candidate.votedBy);
-            // console.log(userId);
-
-            // if(!voted){
-                // Candidate.findOneAndUpdate({ _id: candidateId }, { $push:{'votedBy': userId }}, () => { console.log('recorded') });
-            //     message = 'Your vote has been recorded! ';
-            // }
-            // console.log(message);
+                
+            Poll.findById(pollId)
+                .then(poll => {
+                    Candidate.find({ parentPoll: poll._id }, (err, candidates) => {
+                        if (err) console.log(err);
+                        res.render('result.handlebars', { poll, candidates });
+                    })
+                }
+                )
+                .catch(err => console.log(err))
         })
         .catch(err => console.log(err));
-    
-
 });
+
+function voted(pollId, userId) {
+    Candidate.find({ parentPoll: pollId })
+        .then(candidate => {
+            for (i in candidate) {
+                if (candidate[i].votedBy.includes(userId)) {
+                    console.log('inelligible to vote! ')
+                    return true;
+                    
+                }
+            }
+            console.log('you can caste vote! ')
+            return false;
+        })
+        .catch(err => { return err })
+}
+
+
+
 
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
