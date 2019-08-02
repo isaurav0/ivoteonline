@@ -9,6 +9,7 @@
 	"dependencies": {
 		"bcryptjs": "*",
 		"body-parser": "*",
+		"chart.js": "^2.8.0",
 		"connect-flash": "*",
 		"cookie-parser": "*",
 		"express": "*",
