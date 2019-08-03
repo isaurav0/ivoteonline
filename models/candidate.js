@@ -6,13 +6,11 @@ var candidateSchema = new Schema ({
     name: {
         type: String,
         required: true,
-        unique: true
     },
     votedBy: [{
         type: Schema.Types.ObjectId,
         ref: 'User',
         default: null,
-        unique: true
     }],
     parentPoll: {
         type: Schema.Types.ObjectId,

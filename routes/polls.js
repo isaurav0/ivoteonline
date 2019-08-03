@@ -16,18 +16,19 @@ router.get('/:pollid', ensureAuthenticated, (req, res) => {
                 var voted = false;
                 for (i in candidates) {
                     if (candidates[i].votedBy.includes(userId)) {
-                        console.log('inelligible to vote! ')
+                        console.log('inelligible to vote! ');
                         voted = true;
                     }
                 }
                 if (voted) {
                     var totalvotes = 0
                     for (i in candidates) {
-                        totalvotes += candidates[i].votedBy.length
+                        candidates[i].votes = candidates[i].votedBy.length
+                        totalvotes += candidates[i].votes  
                     }
 
                     for (i in candidates) {
-                        candidates[i].percent = candidates[i].votedBy.length / totalvotes * 100;
+                        candidates[i].percent = Math.round(candidates[i].votedBy.length / totalvotes * 100*100)/100;
                     }
                     
 
@@ -75,12 +76,12 @@ router.post('/:pollid/:candid', ensureAuthenticated, (req, res) => {
                         }
 
                         for (i in candidates) {
-                            candidates[i].percent = candidates[i].votedBy.length / totalvotes * 100;
+                            candidates[i].percent = Math.round(candidates[i].votedBy.length / totalvotes * 100*100)/100;
                         }
 
 
                         if (err) console.log(err);
-                        res.render('result.handlebars', { poll, candidates });
+                        res.render('result.handlebars', { poll, candidates, candidatejs: JSON.stringify(candidates) });
                     })
                 }
                 )

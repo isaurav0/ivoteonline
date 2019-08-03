@@ -6,10 +6,12 @@
                 <div class="col-md-12 text-center">
                     <h2>{{poll.title}}</h2>
                     <hr>
-                    <h3>{{poll.body}}</h3>
+                    <h5>{{poll.body}}</h5>
                     <div class='row'>
                     <div class="col-md-5 col-md-offset-3 text-center">
                         <div>
+                            <canvas id="myChart" width="400" height="400"></canvas>
+                            <br>
                             {{#each candidates}}
                             {{!-- <form action="/poll/{{this.parentPoll}}/{{this._id}}" method="post"> --}}
                             {{!-- <button type="submit"  id='{{this._id}}' class='btn-success pull-right btn-block' method='post'>  --}}
@@ -17,12 +19,12 @@
                             <div>
                                 <h4>{{this.name}}</h4>
                             </div>
-                            <h2>{{this.percent}}%</h2>
+                            <h4>{{this.percent}}%</h4>
                             {{!-- </button> --}}
-                            <br><br><br>
+                            <br>
                             {{!-- </form> --}}
                             {{/each}}
-                            <canvas id="myChart" width="400" height="400"></canvas>
+                            
                             <script type="text/javascript"
                                 src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
                             <script>
@@ -36,8 +38,6 @@
                                     datas.push(candidates[i].votedBy.length);
                                 }
 
-
-                                
                                 var myChart = new Chart(ctx, {
                                     type: 'pie',
                                     data: {
@@ -46,11 +46,15 @@
                                             label: 'Percentage',
                                             data: datas,
                                             backgroundColor: [
-                                                'rgba(255, 99, 132, 0.2)',
-                                                'rgba(54, 162, 235, 0.2)',
-                                                'rgba(255, 206, 86, 0.2)'
+                                                'rgb(255, 0, 0)',
+                                                'rgb(0, 255, 0)',
+                                                'rgb(0, 0, 255)',
+                                                'rgb(255,255,0)',
+                                                'rgb(0,255,255)',
+                                                'rgb(255,0,255'
                                             ],
                                             borderColor: [
+                                            'rgb(255,255,255)'
                                                 
                                             ],
                                             borderWidth: 3
