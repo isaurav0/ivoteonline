@@ -7,7 +7,7 @@ var User = require('../models/user');
 
 //Get Register
 router.get('/register', function (req, res) {
-    res.render('register');
+    res.render('register',{title: 'Register'});
 });
 
 //User Register
@@ -58,7 +58,7 @@ router.post('/register', function (req, res) {
 
 //Get Login
 router.get('/login', ensureAuthenticated, function (req, res) {
-    res.render('login');
+    res.render('login',{title: 'Login'});
 });
 
 

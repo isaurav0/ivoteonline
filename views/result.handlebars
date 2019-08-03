@@ -1,30 +1,41 @@
 <div class="row">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col-md-8 col-md-offset-2">
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-12 text-center">
                     <h2>{{poll.title}}</h2>
+                    <h5>Created At: {{poll.createdAt}}</h5>
+                    <br>
+                    <h5>Expires At: {{poll.expiresAt}}</h5>
                     <hr>
                     <h4>{{poll.body}}</h4>
+                    
                     <div class='row'>
-                    <div class="col-md-5 col-md-offset-3 text-center">
-                        <div>
-                            <canvas id="myChart" width="400" height="400"></canvas>
-                            <br>
+                    <div class="col-md-6 col-md-offset-3 text-center">
+                        <div class="col-md-10 col-md-offset-1 text-center">
+                            <canvas id="myChart" width="100" height="100"></canvas>
+                            <table class='table'>
+                            
+                            <tr>
+                                <th> Name </th>
+                                <th> No. Of Votes</th>
+                                <th> Percentage </th>
+                            </tr>
                             {{#each candidates}}
                             {{!-- <form action="/poll/{{this.parentPoll}}/{{this._id}}" method="post"> --}}
                             {{!-- <button type="submit"  id='{{this._id}}' class='btn-success pull-right btn-block' method='post'>  --}}
+                            <tr>
+                                <td>{{this.name}}</td>
+                                <td>{{this.votes}}</td>
+                                <td>{{this.percent}}</td>
+                            </tr>
 
-                            <div>
-                                <h4>{{this.name}}</h4>
-                            </div>
-                            <h4>{{this.percent}}%</h4>
                             {{!-- </button> --}}
                             <br>
                             {{!-- </form> --}}
                             {{/each}}
-                            
+                            </table>
                             <script type="text/javascript"
                                 src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
                             <script>

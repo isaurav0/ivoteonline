@@ -32,11 +32,11 @@ router.get('/:pollid', ensureAuthenticated, (req, res) => {
                     }
                     
 
-                    res.render('result.handlebars', { poll, candidates, candidatejs: JSON.stringify(candidates) });
+                    res.render('result.handlebars', { title: 'Result', poll, candidates, candidatejs: JSON.stringify(candidates) });
                 }
                 else {
                     console.log(poll, candidates)
-                    res.render('polls.handlebars', { poll, candidates });
+                    res.render('polls.handlebars', {title: 'Home' ,poll, candidates });
                 }
             })
         }
@@ -67,25 +67,26 @@ router.post('/:pollid/:candid', ensureAuthenticated, (req, res) => {
                 console.log('vote casted')
             }
 
-            Poll.findById(pollId)
-                .then(poll => {
-                    Candidate.find({ parentPoll: poll._id }, (err, candidates) => {
-                        var totalvotes = 0
-                        for (i in candidates) {
-                            totalvotes += candidates[i].votedBy.length
-                        }
+            res.redirect('/poll/'+pollId)
+            // Poll.findById(pollId)
+            //     .then(poll => {
+            //         Candidate.find({ parentPoll: poll._id }, (err, candidates) => {
+            //             var totalvotes = 0
+            //             for (i in candidates) {
+            //                 totalvotes += candidates[i].votedBy.length
+            //             }
 
-                        for (i in candidates) {
-                            candidates[i].percent = Math.round(candidates[i].votedBy.length / totalvotes * 100*100)/100;
-                        }
+            //             for (i in candidates) {
+            //                 candidates[i].percent = Math.round(candidates[i].votedBy.length / totalvotes * 100*100)/100;
+            //             }
 
 
-                        if (err) console.log(err);
-                        res.render('result.handlebars', { poll, candidates, candidatejs: JSON.stringify(candidates) });
-                    })
-                }
-                )
-                .catch(err => console.log(err))
+            //             if (err) console.log(err);
+            //             res.render('result.handlebars', { poll, candidates, candidatejs: JSON.stringify(candidates) });
+            //         })
+            //     }
+            //     )
+            //     .catch(err => console.log(err))
         })
         .catch(err => console.log(err));
 });

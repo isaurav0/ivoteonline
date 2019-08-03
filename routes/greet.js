@@ -3,7 +3,7 @@ var router = express.Router();
 
 //Get Homepage
 router.get('/', function (req, res) {
-    res.render('greet');
+    res.render('greet', {title: 'iVoteOnline'});
 });
 
 module.exports = router;

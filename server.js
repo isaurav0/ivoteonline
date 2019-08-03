@@ -87,6 +87,11 @@ app.use('/create', require('./routes/create'));
 app.use('/mypolls', require('./routes/mypolls'));
 
 
+//setup favicon
+var favicon = require('serve-favicon');
+app.use(favicon(__dirname + '/public/images/favicon.ico'));
+
+
 //Set Port
 app.set('port',3000);
 

@@ -16,6 +16,10 @@ var pollSchema = new Schema({
     expireAt: {
         type: Date,
     },
+    createdAt: {
+        type: Date,
+        default: Date.now()
+    },
     comment: {
         type: String
     },

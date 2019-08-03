@@ -11,7 +11,7 @@ router.get('/', ensureAuthenticated, function (req, res) {
     Poll.find()
         .then(data=>{
             // console.log(data)
-            res.render('index',{data});
+            res.render('index',{title:'Home', data});
         })
         .catch(err=>console.log(err));
 

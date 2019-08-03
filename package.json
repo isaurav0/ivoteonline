@@ -17,12 +17,14 @@
 		"express-messages": "*",
 		"express-session": "*",
 		"express-validator": "5.3.1",
+		"moment": "^2.24.0",
 		"mongodb": "*",
 		"mongojs": "*",
 		"mongoose": "*",
 		"passport": "*",
 		"passport-http": "*",
-		"passport-local": "*"
+		"passport-local": "*",
+		"serve-favicon": "^2.5.0"
 	},
 	"author": "Saurav Pathak"
 }

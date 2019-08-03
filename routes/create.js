@@ -5,7 +5,7 @@ var Candidate = require('../models/candidate');
 
 
 router.get('/', ensureAuthenticated,function (req, res) {
-    res.render('create');
+    res.render('create', {title: 'Create Poll'});
     // console.log(user);
 });
 
@@ -15,8 +15,10 @@ router.post('/', ensureAuthenticated, (req, res)=>{
     var candidatesName = req.body.candidates;
     var public = req.body.optradio;
     var authorID = req.cookies['userData']._id;
+    var expireAt = new Date(req.body.expiry_date).toISOString();
+    console.log(expireAt);
 
-    var newPoll = new Poll({title, body, public, authorID});
+    var newPoll = new Poll({title, body, public, authorID, expireAt});
     newPoll
         .save()
         .then(()=>{console.log("created new Poll")})
