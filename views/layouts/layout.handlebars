@@ -5,7 +5,39 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{host}}/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
     <title>Passport</title>
+    <style>
+
+      *{
+        font-family: Oranda;
+      }
+
+        /*-- change navbar dropdown color --*/
+      .navbar-default .navbar-nav .open .dropdown-menu>li>a,.navbar-default .navbar-nav .open .dropdown-menu {
+        background: rgb(248, 248, 248);
+        color: rgb(55,123,181) !important;
+      }
+
+      #nav > li:hover{
+        color: rgb(55,123,181) !important;
+      }
+
+      .navbar{
+        background: rgb(55,123,181);
+        border: 0px;
+        border-radius: 0;
+        
+      }
+      .navbar *{
+        font-family: Raleway;
+        color: white !important;
+      }
+
+      body{
+        background: rgb(248, 248, 248);
+      }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-default">
@@ -31,17 +63,17 @@
           {{/if}}
           <ul class="nav navbar-nav navbar-right">
             {{#if user}}
-                <li> <a href="/create">Create</a></li>
-                <li> <a href="/mypolls">My Polls</a></li>
+                <li> <a class='navtext' href="/create">Create</a></li>
+                <li> <a class='navtext' href="/mypolls">My Polls</a></li>
                 <li class="dropdown">
                   <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{user.name}} <span class="caret"></span></a>
                   <ul class="dropdown-menu">
-                    <li><a href="/users/logout">Logout</a></li>
+                    <li><a class='dropdown' href="/users/logout">Logout</a></li>
                   </ul>
                 </li>
             {{else}}
-                <li><a href="/users/login">Login</a></li>
-                <li><a href="/users/register">Register</a></li>
+                <li><a class='navtext' href="/users/login">Login</a></li>
+                <li><a class='navtext' href="/users/register">Register</a></li>
                 {{!-- <li><a href="/secret">Secret</a></li> --}}
                 
             {{/if}}
@@ -57,3 +89,5 @@
  
 </body>
 </html>
+
+{{!-- background: rgb(176,122,252); --}}
