@@ -29,10 +29,12 @@ router.get('/:pollid', ensureAuthenticated, (req, res) => {
                     for (i in candidates) {
                         candidates[i].percent = candidates[i].votedBy.length / totalvotes * 100;
                     }
+                    
 
-                    res.render('result.handlebars', { poll, candidates });
+                    res.render('result.handlebars', { poll, candidates, candidatejs: JSON.stringify(candidates) });
                 }
                 else {
+                    console.log(poll, candidates)
                     res.render('polls.handlebars', { poll, candidates });
                 }
             })
@@ -75,6 +77,7 @@ router.post('/:pollid/:candid', ensureAuthenticated, (req, res) => {
                         for (i in candidates) {
                             candidates[i].percent = candidates[i].votedBy.length / totalvotes * 100;
                         }
+
 
                         if (err) console.log(err);
                         res.render('result.handlebars', { poll, candidates });

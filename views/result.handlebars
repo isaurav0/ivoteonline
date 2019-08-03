@@ -1,49 +1,79 @@
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-12 text-center">
-                            <h2>{{poll.title}}</h2><hr>
-                            <h3>{{poll.body}}</h3>
-                            
-                            
-                            <div class='row'>
-                                <div class="col-md-5 col-md-offset-3 text-center">
-                                    <div>
-                                        {{#each candidates}}
-                                        {{!-- <form action="/poll/{{this.parentPoll}}/{{this._id}}" method="post"> --}}
-                                            {{!-- <button type="submit"  id='{{this._id}}' class='btn-success pull-right btn-block' method='post'>  --}}
-                                            
-                                            <div>
-                                                <h4>{{this.name}}</h4>
-                                            </div>
-                                            <h2>{{this.percent}}%</h2>
-                                            {{!-- </button> --}}
-                                            <br><br><br>
-                                        {{!-- </form> --}}
-                                        {{/each}}   
-                                        <canvas id="myChart" width="400" height="400"></canvas>
-                                        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-                                        <script src='/js/chart.js'></script>
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h2>{{poll.title}}</h2>
+                    <hr>
+                    <h3>{{poll.body}}</h3>
+                    <div class='row'>
+                    <div class="col-md-5 col-md-offset-3 text-center">
+                        <div>
+                            {{#each candidates}}
+                            {{!-- <form action="/poll/{{this.parentPoll}}/{{this._id}}" method="post"> --}}
+                            {{!-- <button type="submit"  id='{{this._id}}' class='btn-success pull-right btn-block' method='post'>  --}}
 
-                                        </div>
-
-                                    </div> 
-                                </div>
+                            <div>
+                                <h4>{{this.name}}</h4>
                             </div>
+                            <h2>{{this.percent}}%</h2>
+                            {{!-- </button> --}}
+                            <br><br><br>
+                            {{!-- </form> --}}
+                            {{/each}}
+                            <canvas id="myChart" width="400" height="400"></canvas>
+                            <script type="text/javascript"
+                                src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+                            <script>
+                                var ctx = document.getElementById("myChart");
+                                var candidates = {{{candidatejs}}}
+                                label = []
+                                datas = []
+
+                                for(i in candidates){
+                                    label.push(candidates[i].name);
+                                    datas.push(candidates[i].votedBy.length);
+                                }
+
+
+                                
+                                var myChart = new Chart(ctx, {
+                                    type: 'pie',
+                                    data: {
+                                        labels: label,
+                                        datasets: [{
+                                            label: 'Percentage',
+                                            data: datas,
+                                            backgroundColor: [
+                                                'rgba(255, 99, 132, 0.2)',
+                                                'rgba(54, 162, 235, 0.2)',
+                                                'rgba(255, 206, 86, 0.2)'
+                                            ],
+                                            borderColor: [
+                                                
+                                            ],
+                                            borderWidth: 3
+                                        }]
+                                    },
+                                });
+                            </script>
 
                         </div>
-                        </div>
-                        
-                        </div>
-                        {{#if message}}
-                        <p>{{message}}</p>
-                        {{/if}}
+
+                    </div>
                     </div>
                 </div>
+
             </div>
         </div>
+
     </div>
-
-
+    {{#if message}}
+    <p>{{message}}</p>
+    {{/if}}
+    </div>
+</div>
+</div>
+</div>
+</div>
