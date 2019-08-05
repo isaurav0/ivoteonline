@@ -24,6 +24,7 @@ router.post('/',ensureAuthenticated,(req, res)=>{
         var voterList = req.body.voters;
     }
 
+    //save poll
     if(!election){
         var newPoll = new Poll({title, body, public, authorID,election:false});
         newPoll
@@ -31,6 +32,7 @@ router.post('/',ensureAuthenticated,(req, res)=>{
             .then(()=>{console.log("created new Poll")})
             .catch(err=>console.log(err));
     }
+    //election
     else{
         var newPoll = new Poll({title, body, public, authorID,election:true});
         for(i in voterList){
@@ -42,8 +44,6 @@ router.post('/',ensureAuthenticated,(req, res)=>{
             .catch(err=>console.log(err));
     }
     
-
-
 
     console.log(newPoll._id)
     candidatesName.forEach(element => {
