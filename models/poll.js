@@ -25,10 +25,15 @@ var pollSchema = new Schema({
     },
     authorID: {
         type: String
-    },
-    public: {
-        type: Boolean
     }
+    ,
+    election: {
+        type: Boolean
+    },
+    voterList: {
+        type: String
+    }
+    
     // candidates: [candidateSchema.schema]
 }, {timestamps: true});
 
