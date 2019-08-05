@@ -86,6 +86,7 @@ app.use('/greet', require('./routes/greet'));
 app.use('/create', require('./routes/create'));
 app.use('/mypolls', require('./routes/mypolls'));
 app.use('/aboutme', require('./routes/aboutme'));
+app.use('/elections', require('./routes/elections'));
 
 
 //setup favicon

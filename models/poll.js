@@ -30,9 +30,9 @@ var pollSchema = new Schema({
     election: {
         type: Boolean
     },
-    voterList: {
+    voterList: [{
         type: String
-    }
+    }]
     
     // candidates: [candidateSchema.schema]
 }, {timestamps: true});

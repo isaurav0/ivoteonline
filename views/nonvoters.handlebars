@@ -1,0 +1,35 @@
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h2>{{poll.title}}</h2><hr>
+                            <h3>{{poll.body}}</h3>
+                                                        
+                            <div class='row'>
+                                <div class="col-md-5 col-md-offset-3 text-center">
+                                    <div>
+                                        {{#each candidates}}                                                                     
+                                            <h4>{{this.name}}</h4>                                                                                                                                
+                                        {{/each}}                                                                            
+                                    </div> 
+                                </div>
+                            </div>
+
+                                    <div>
+                                        <h3 style="color: red;">You can't vote in this election. </h3>                                                                          
+                                    </div>                     
+                            </div>
+
+                        </div>
+                        </div>
+                        
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+

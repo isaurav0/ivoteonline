@@ -9,6 +9,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 router.get('/:pollid', ensureAuthenticated, (req, res) => {
     userId = new ObjectId(req.cookies['userData']._id);
     pollId = new ObjectId(req.params.pollid);
+    email = req.cookies['userData'].email
     Poll.findById(pollId)
         .then(poll => {
             Candidate.find({ parentPoll: poll._id }, (err, candidates) => {
@@ -20,35 +21,44 @@ router.get('/:pollid', ensureAuthenticated, (req, res) => {
                         voted = true;
                     }
                 }
+                //if voted render result 
                 if (voted) {
                     var totalvotes = 0
                     for (i in candidates) {
                         candidates[i].votes = candidates[i].votedBy.length
-                        totalvotes += candidates[i].votes  
+                        totalvotes += candidates[i].votes
                     }
-
                     for (i in candidates) {
-                        candidates[i].percent = Math.round(candidates[i].votedBy.length / totalvotes * 100*100)/100;
+                        candidates[i].percent = Math.round(candidates[i].votedBy.length / totalvotes * 100 * 100) / 100;
                     }
-                    
-
+                
                     res.render('result.handlebars', { title: 'Result', poll, candidates, candidatejs: JSON.stringify(candidates) });
+                    
+                    
                 }
+                //if not voted check if elligible
                 else {
-                    console.log(poll, candidates)
-                    res.render('polls.handlebars', {title: 'Home' ,poll, candidates });
-                }
+                    //check if election contains voter's email
+
+                    if(poll.election && !poll.voterList.includes(email))
+                    {
+                        res.render('nonvoters.handlebars',{title:'Election',poll,candidates})
+                    }
+                    else{
+                        console.log(poll, candidates)
+                        res.render('polls.handlebars', {title: 'Polls' ,poll, candidates });
+                    }
+                }            
             })
-        }
-        )
+        })
         .catch(err => console.log(err))
-})
+});
+
 
 router.post('/:pollid/:candid', ensureAuthenticated, (req, res) => {
     userId = new ObjectId(req.cookies['userData']._id);
     pollId = new ObjectId(req.params.pollid);
     candidateId = new ObjectId(req.params.candid);
-
 
     Candidate.find({ parentPoll: pollId })
         .then(candidate => {
@@ -67,26 +77,8 @@ router.post('/:pollid/:candid', ensureAuthenticated, (req, res) => {
                 console.log('vote casted')
             }
 
-            res.redirect('/poll/'+pollId)
-            // Poll.findById(pollId)
-            //     .then(poll => {
-            //         Candidate.find({ parentPoll: poll._id }, (err, candidates) => {
-            //             var totalvotes = 0
-            //             for (i in candidates) {
-            //                 totalvotes += candidates[i].votedBy.length
-            //             }
+            res.redirect('/poll/' + pollId)
 
-            //             for (i in candidates) {
-            //                 candidates[i].percent = Math.round(candidates[i].votedBy.length / totalvotes * 100*100)/100;
-            //             }
-
-
-            //             if (err) console.log(err);
-            //             res.render('result.handlebars', { poll, candidates, candidatejs: JSON.stringify(candidates) });
-            //         })
-            //     }
-            //     )
-            //     .catch(err => console.log(err))
         })
         .catch(err => console.log(err));
 });
@@ -101,19 +93,3 @@ function ensureAuthenticated(req, res, next) {
     }
 }
 module.exports = router;
-
-// function voted(pollId, userId) {
-//     Candidate.find({ parentPoll: pollId })
-//         .then(candidate => {
-//             for (i in candidate) {
-//                 if (candidate[i].votedBy.includes(userId)) {
-//                     console.log('inelligible to vote! ')
-//                     return true;
-
-//                 }
-//             }
-//             console.log('you can caste vote! ')
-//             return false;
-//         })
-//         .catch(err => { return err })
-// }

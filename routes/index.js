@@ -8,7 +8,7 @@ var User = require('../models/user');
 router.get('/', ensureAuthenticated, function (req, res) {
     res.cookie('userData',req.user);
     titles=[]
-    Poll.find()
+    Poll.find({election:false})
         .then(data=>{
             // console.log(data)
             res.render('index',{title:'Home', data});
