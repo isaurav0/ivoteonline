@@ -30,7 +30,8 @@ router.post('/register', function (req, res) {
         res.render('register', {
             errors: errors
         });
-    }else{
+    }
+    else{
         var newUser = new User({
             name: name,
             username: username,

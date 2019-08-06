@@ -16,9 +16,8 @@ router.post('/',ensureAuthenticated,(req, res)=>{
     var public = req.body.optradio;
     var authorID = req.cookies['userData']._id;
     // expireAt = new Date(req.body.expiry_date);
-    // expireAt.setHours(expireAt.getHours()+5);
-    // expireAt.setMinutes(expireAt.getMinutes()+45);
-    // expireAt = expireAt.toISOString();
+    
+    req.checkBody('title', 'Title is required. ').notEmpty();
     var election = (req.body.election=='true') ? true : false;
     if(election){
         var voterList = req.body.voters;
@@ -26,7 +25,7 @@ router.post('/',ensureAuthenticated,(req, res)=>{
 
     //save poll
     if(!election){
-        var newPoll = new Poll({title, body, public, authorID,election:false});
+        var newPoll = new Poll({title, body, public, authorID,election});
         newPoll
             .save()
             .then(()=>{console.log("created new Poll")})
@@ -34,9 +33,9 @@ router.post('/',ensureAuthenticated,(req, res)=>{
     }
     //election
     else{
-        var newPoll = new Poll({title, body, public, authorID,election:true});
+        var newPoll = new Poll({title, body, public, authorID,election});
         for(i in voterList){
-            newPoll.voterList.push(voterList[i])
+            newPoll.voterList.push(voterList[i]);
         }
         newPoll
             .save()
