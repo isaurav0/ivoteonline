@@ -1,11 +1,4 @@
-<style>
-    .row {
-        display: flex; /* equal height of the children */
-    }
-
-</style>
-
-<div class="row">
+{{!-- <div class="row"> --}}
     <div class="col-md-7 col-md-offset-2">
         <div class="panel panel-default">
         <div class="panel-body">
@@ -84,31 +77,22 @@
                     </div>
                     </div>
                 </div>
+                <div class=" col-lg-4 col-lg-offset-4 alert alert-success alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <strong>You have voted in this poll. </strong>
+                                </div>
 
+        </div>
             </div>
         </div>
-
-        </div>
+        
         {{#if message}}
         <p>{{message}}</p>
         {{/if}}
         </div>
     </div>
     </div>
-    </div>
-    <div class="col-md-3 col-md-offset-9 col">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    Hello All 
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-
-</div>
+{{!-- </div> --}}
 {{!-- 33,35,38 --}}
 
     

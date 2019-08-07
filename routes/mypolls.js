@@ -11,7 +11,11 @@ router.get('/', ensureAuthenticated, function (req, res) {
     Poll.find({authorID: req.user._id})
         .then(data=>{
             // console.log(data)
-            res.render('index',{data, title:'My Polls'});
+            if(data.length==0)
+                res.render('nopolls');                        
+            else
+                res.render('index',{data, title:'My Polls'});
+                
         })
         .catch(err=>console.log(err));
 

@@ -9,6 +9,9 @@ const expressSession = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
+const chartjs = require('chart.js')
+
+
 
 //database
 const db = require('./config/keys').MONGO_URI;
