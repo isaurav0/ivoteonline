@@ -33,22 +33,11 @@ router.get('/:pollid', ensureAuthenticated, (req, res) => {
                     }
                 
                     res.render('result.handlebars', { title: 'Result', poll, candidates, candidatejs: JSON.stringify(candidates) });
-                    
-                    
                 }
                 //if not voted check if elligible
                 else {
-                    //check if election contains voter's email
-
-                    if(poll.election && !poll.voterList.includes(email))
-                    {
-                        res.render('nonvoters.handlebars',{title:'Election',poll,candidates})
-                    }
-                    else{
-                        console.log(poll, candidates)
                         res.render('polls.handlebars', {title: 'Polls' ,poll, candidates });
-                    }
-                }            
+                }           
             })
         })
         .catch(err => console.log(err))

@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-var candidateSchema = require('./candidate')
+// var candidateSchema = require('./candidate')
 
 //User Schema
 var pollSchema = new Schema({
@@ -32,13 +32,11 @@ var pollSchema = new Schema({
     },
     voterList: [{
         type: String
-    }]
-    
+    }],
     // candidates: [candidateSchema.schema]
 }, {timestamps: true});
 
 var Poll=module.exports = mongoose.model('Poll', pollSchema);
-
 
 
 // module.exports.createPoll = function(newPoll, callback){

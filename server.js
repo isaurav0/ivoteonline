@@ -9,8 +9,7 @@ const expressSession = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
-const chartjs = require('chart.js')
-
+const chartjs = require('chart.js');
 
 
 //database
@@ -26,7 +25,18 @@ const app = express();
 
 //View Engine
 app.set('views', path.join(__dirname, 'views'));
-app.engine('handlebars', expressHandlebars({defaultLayout:'layout'}));
+app.engine('handlebars', expressHandlebars({
+	defaultLayout:'layout', 
+	helpers: {
+		count: function(n, block) {
+				var accum = '';
+				for(var i = 0; i < n; ++i)
+					accum += block.fn(i);
+				return accum;
+			}
+		}
+	}
+));
 app.set('view engine', 'handlebars');
 
 //Body parser middleware
@@ -54,23 +64,19 @@ app.use(passport.session());
 
 // Express validator
 app.use(expressValidator());
-// 	errorFormatter: function (param, msg, value) {
-// 		var namespace = param.split('.')
-// 			, root = namespace.shift()
-// 			, formParam = root;
-// 		while(namespace.length){
-// 			formParam += '[' + namespace.shift() + ']';
-// 		}
-// 		return {
-// 			param: formParam,
-// 			msg: msg,
-// 			value: value
-// 		};
-	// }
+
 
 
 //Connect flash
 app.use(connectFlash());
+
+//handlebars helper
+// Handlebars.registerHelper('times', function(n, block) {
+//     var accum = '';
+//     for(var i = 0; i < n; ++i)
+//         accum += block.fn(i);
+//     return accum;
+// });
 
 //Global vars
 app.use(function (req, res, next) {
@@ -90,6 +96,9 @@ app.use('/create', require('./routes/create'));
 app.use('/mypolls', require('./routes/mypolls'));
 app.use('/aboutme', require('./routes/aboutme'));
 app.use('/elections', require('./routes/elections'));
+app.use('/createelection', require('./routes/createelection'));
+app.use('/createpoll', require('./routes/createpoll'));
+
 
 
 //setup favicon

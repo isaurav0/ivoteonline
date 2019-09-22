@@ -15,6 +15,10 @@ var candidateSchema = new Schema ({
     parentPoll: {
         type: Schema.Types.ObjectId,
         ref: 'Poll'
+    },
+    parentPanel: {
+        type: Schema.Types.ObjectId,
+        ref: 'Panel'
     }
 });
 

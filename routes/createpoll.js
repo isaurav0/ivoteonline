@@ -5,7 +5,7 @@ var Candidate = require('../models/candidate');
 
 
 router.get('/' ,ensureAuthenticated,function (req, res) {
-    res.render('choose', {title: 'Choose'});
+    res.render('createpoll', {title: 'Create Poll'});
     // console.log(user);
 });
 
@@ -15,34 +15,27 @@ router.post('/',ensureAuthenticated,(req, res)=>{
     var candidatesName = req.body.candidates;
     var public = req.body.optradio;
     var authorID = req.cookies['userData']._id;
-    // expireAt = new Date(req.body.expiry_date);
+    var election = false;
     
-    req.checkBody('title', 'Title is required. ').notEmpty();
-    var election = (req.body.election=='true') ? true : false;
-    if(election){
-        var voterList = req.body.voters;
-    }
 
     //save poll
-    if(!election){
-        var newPoll = new Poll({title, body, public, authorID,election});
-        newPoll
-            .save()
-            .then(()=>{console.log("created new Poll")})
-            .catch(err=>console.log(err));
-    }
+    var newPoll = new Poll({title, body, authorID, election});
+    newPoll
+        .save()
+        .then(()=>{console.log("created new Poll")})
+        .catch(err=>console.log(err));
     //election
-    else{
-        var newPoll = new Poll({title, body, public, authorID,election});
-        for(i in voterList){
-            newPoll.voterList.push(voterList[i]);
-        }
-        newPoll
-            .save()
-            .then(()=>{console.log("created new Poll")})
-            .catch(err=>console.log(err));
-    }
-    
+    // else{
+    //     var newPoll = new Poll({title, body, public, authorID,election});
+    //     for(i in voterList){
+    //         newPoll.voterList.push(voterList[i]);
+    //     }
+    //     newPoll
+    //         .save()
+    //         .then(()=>{console.log("created new Poll")})
+    //         .catch(err=>console.log(err));
+    // }
+
 
     console.log(newPoll._id)
     candidatesName.forEach(element => {
@@ -58,16 +51,6 @@ router.post('/',ensureAuthenticated,(req, res)=>{
                 .catch(err=>console.log(err))
         }
     });
-
-    
-
-    // console.log('title: '+title);
-    // console.log('Description: '+body);
-    // console.log('Candidates: '+candidates);
-    // console.log('Public: '+ public);
-    // console.log('User ID: '+authorID);
-
-
 });
 
 function ensureAuthenticated(req, res, next) {

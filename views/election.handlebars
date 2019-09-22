@@ -1,0 +1,25 @@
+{{#each data}}
+<div class="container centered-form center-block">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <a href='/elections/{{this._id}}'>
+                        <div class="col-md-12 text-center">
+                            <h2>{{this.title}}</h2><hr>
+                        </div>
+                        </a>
+                        
+                        </div>
+                        <div class="col-md-12 text-center">
+                            <h4>{{this.body}}</h4>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{/each}}
