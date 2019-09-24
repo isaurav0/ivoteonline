@@ -16,6 +16,9 @@ var pollSchema = new Schema({
     expireAt: {
         type: Date,
     },
+    running: {
+        type: Boolean
+    },
     createdAt: {
         type: Date,
         default: Date.now()
