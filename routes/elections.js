@@ -67,8 +67,8 @@ router.get('/:eid', ensureAuthenticated,(req, res) => {
                     
                                             }
                                             data['poll'].panels[i].totalvotes = totalvotes;
-                                            for (j in data['poll'].panels[i].candidates) {                                                                                                
-                                                    data['poll'].panels[i].candidates[j].percent = Math.round(data['poll'].panels[i].candidates[j].votedBy.length / totalvotes * 100 * 100) / 100;                                                                                                                                                                                                
+                                            for (j in data['poll'].panels[i].candidates) {                                                                                                                                            
+                                                    data['poll'].panels[i].candidates[j].percent = Math.round(data['poll'].panels[i].candidates[j].votes / totalvotes * 100 * 100) / 100;                                                                                                                                                                                                
                                                 }                                                   
                                             }                                            
                                             

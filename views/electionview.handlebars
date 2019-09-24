@@ -5,6 +5,7 @@
     </div>
 
     {{#each poll.panels}}
+    {{#unless this.voted}}
     <div class="col-lg-5 col-lg-offset-3 panel text-center panel-body">
         <h3>{{this.name}}</h3> <hr>
         {{#each this.candidates}}
@@ -19,6 +20,89 @@
             <br>
         {{/each}}
     </div>
+    {{else}}
+        <div class="col-md-7 col-md-offset-2">
+            
+        <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row text-center">
+                <h3>{{this.name}}</h3> <hr>
+                <div class="col-md-12 text-center ">
+                    <div class='row'>
+                    <div class="col-md-6 col-md-offset-3 text-center">
+                        <div class="col-md-10 col-md-offset-1 text-center">
+                            <canvas id="myChart" width="100" height="100"></canvas>
+                            <table class='table'>
+                            
+                            <tr>
+                                <th> Name </th>
+                                <th> No. Of Votes</th>
+                                <th> Percentage </th>
+                            </tr>
+                            {{#each this.candidates}}
+                                                    
+                            <tr>
+                                <td>{{this.name}}</td>
+                                <td>{{this.votes}}</td>
+                                <td>{{this.percent}}</td>
+                            </tr>
+
+                            {{!-- </button> --}}
+                            <br>
+                            {{!-- </form> --}}
+                            {{/each}}
+                            </table>
+                            {{!-- <script type="text/javascript"
+                                src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+                            <script>
+                                var ctx = document.getElementById("myChart");
+                                var candidates = {{{candidatejs}}}
+                                label = []
+                                datas = []
+
+                                for(i in candidates){
+                                    label.push(candidates[i].name);
+                                    datas.push(candidates[i].votedBy.length);
+                                }
+
+                                var myChart = new Chart(ctx, {
+                                    type: 'pie',
+                                    data: {
+                                        labels: label,
+                                        datasets: [{
+                                            label: 'Percentage',
+                                            data: datas,
+                                            backgroundColor: [
+                                                'rgb(43, 152, 240)',
+                                                'rgb(30, 188, 210)',
+                                                'rgb(21, 149, 136)',
+                                                'rgb(80,174,84)',
+                                                'rgb(205,218,73)',
+                                                'rgb(253,151,38)',                                                                                                                            
+                                            ],
+                                            borderColor: [
+                                            'rgb(255,255,255)'
+                                                
+                                            ],
+                                            borderWidth: 1
+                                        }]
+                                    },
+                                });
+                            </script> --}}
+
+                        </div>
+
+                    </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>            
+
+    {{/unless}}
+
     {{/each}}
 
 
