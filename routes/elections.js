@@ -9,7 +9,7 @@ var data = {
 };
 
 
-router.get('/', function (req, res) {
+router.get('/', ensureAuthenticated,function (req, res) {
     Poll.find({election: true})
         .then(data=>{
             res.render('election',{title:'Elections', data}); 
@@ -17,8 +17,8 @@ router.get('/', function (req, res) {
         .catch(err=>console.log(err));
 });
 
-router.get('/:eid', (req, res) => {
-    userId = new ObjectId(req.cookies['userData']._id);
+router.get('/:eid', ensureAuthenticated,(req, res) => {
+    userId = req.cookies['userData']._id
     eid = new ObjectId(req.params.eid);
     email = req.cookies['userData'].email;
     var p_ids = [];
@@ -29,59 +29,105 @@ router.get('/:eid', (req, res) => {
             Panel.find({parentPoll: eid}).lean()
                 .then(panels=>{
                     data['poll'].panels = panels;
-                    for(i in panels)
-                        data['poll'].panels[i].candidates = []
-
+                    data['poll'].elligible = false;
+                    for(i in panels){
+                        data['poll'].panels[i].candidates = [];
+                        data['poll'].panels[i].voted=false;
+                        data['poll'].panels[i].totalvotes=0;
+                        
+                    }                                                
                         Candidate.find({parentPoll: poll._id}).lean()
                             .then(candidates => {
                                 for(i in candidates){
-                                    for(j in panels){                            
-                                        if(JSON.stringify(candidates[i].parentPanel)===JSON.stringify(panels[j]._id)){
-                                            console.log(candidates[i].parentPanel, "===", panels[j]._id)
-                                            data['poll'].panels[j].candidates.push(candidates[i])
-                                        }                                      
-                                    }
+                                    candidates[i].percent = 0;
                                 }
-                                res.render('electionview', data)
+
+                                if(poll.voterList.includes(email)){
+                                    data['poll'].elligible = true;
+                                    for(i in candidates){
+                                        for(j in panels){                            
+                                            if(JSON.stringify(candidates[i].parentPanel)===JSON.stringify(panels[j]._id)){                                            
+                                                data['poll'].panels[j].candidates.push(candidates[i]);
+                                                //check if already voted or not
+                                                for(k in candidates[i].votedBy){
+                                                    if(candidates[i].votedBy[k]==userId)
+                                                        data['poll'].panels[j].voted=true;
+                                                        var message = 'You have already voted!'   
+                                                }                                                                                                                                                                            
+                                            }                                      
+                                        }                                    
+                                    }
+                                    
+                                    for(i in panels){                                        
+                                        if(panels[i].voted){
+                                            totalvotes = 0;
+                                            for (j in data['poll'].panels[i].candidates) {                                                                               
+                                                data['poll'].panels[i].candidates[j].votes = data['poll'].panels[i].candidates[j].votedBy.length;
+                                                totalvotes += data['poll'].panels[i].candidates[j].votes;
+                    
+                                            }
+                                            data['poll'].panels[i].totalvotes = totalvotes;
+                                            for (j in data['poll'].panels[i].candidates) {                                                                                                
+                                                    data['poll'].panels[i].candidates[j].percent = Math.round(data['poll'].panels[i].candidates[j].votedBy.length / totalvotes * 100 * 100) / 100;                                                                                                                                                                                                
+                                                }                                                   
+                                            }                                            
+                                            
+                                        }   
+                                        
+                                        // res.send(data)
+                                        res.render('electionview',data)
+                                    }
+
+                                else{
+                                    var message='You are not included in this election';
+                                    res.render('restricted',data);
+                                }                                                                                                                                                                                            
                             })
                             .catch(err=>console.log(err));
                     
                 })
                 .catch(err=>console.log(err));
                 
-            })
-
-            // Candidate.find({ parentPoll: poll._id }, (err, candidates) => {
-            //     if (err) console.log(err);
-            //     var voted = false;
-            //     for (i in candidates) {
-            //         if (candidates[i].votedBy.includes(userId)) {
-            //             console.log('inelligible to vote! ');
-            //             voted = true;
-            //         }
-            //     }
-            //     //if voted render result 
-            //     if (voted) {
-            //         var totalvotes = 0
-            //         for (i in candidates) {
-            //             candidates[i].votes = candidates[i].votedBy.length
-            //             totalvotes += candidates[i].votes
-            //         }
-            //         for (i in candidates) {
-            //             candidates[i].percent = Math.round(candidates[i].votedBy.length / totalvotes * 100 * 100) / 100;
-            //         }
-                
-            //         res.render('result.handlebars', { title: 'Result', poll, candidates, candidatejs: JSON.stringify(candidates) });
-            //     }
-            //     //if not voted check if elligible
-            //     else {
-            //             res.render('polls.handlebars', {title: 'Polls' ,poll, candidates });
-            //     }           
-            // })
-        // })
+            })    
         .catch(err => console.log(err));
 });
 
+
+router.post('/:pid/:cid', ensureAuthenticated,(req, res)=>{
+    userId = req.cookies['userData']._id
+    pid = new ObjectId(req.params.pid);
+    cid = new ObjectId(req.params.cid);
+    email = req.cookies['userData'].email;
+    Panel.findById(pid)
+        .then(panel=>{
+            pollid = panel.parentPoll;
+            Candidate.find({parentPanel: panel._id})
+                .then(candidates=>{
+                    var voted = false;
+                    for(i in candidates){
+                        for(j in candidates[i].votedBy){
+                            if(candidates[i].votedBy[j]==userId){
+                                voted=true;
+                            }
+                        }
+                    }
+
+                    if (!voted) {
+                        Candidate.findOneAndUpdate({ _id: cid }, { $push: { 'votedBy': userId } }, (err, cand) => {
+                            message = 'You voted ' + cand.name;
+                            console.log(message)
+                        });
+                        console.log('vote casted')                        
+                    }
+                    res.redirect('/elections/'+pollid)
+                                                        
+                })
+        })
+        .catch(err=>console.log(err))
+    
+
+
+})
 
 function ensureAuthenticated(req, res, next) {
     if(req.isAuthenticated()){

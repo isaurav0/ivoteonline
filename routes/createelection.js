@@ -5,18 +5,18 @@ var Candidate = require('../models/candidate');
 var Panel = require('../models/panel.js');
 
 
-router.get('/' ,function (req, res) {
+router.get('/' ,ensureAuthenticated,function (req, res) {
     res.render('createelection', {title: 'Create Election'});
     // console.log(user);
 });
 
-router.post('/',(req, res)=>{
+router.post('/',ensureAuthenticated, (req, res)=>{
     var p_number = req.body.number;
     console.log(p_number);
     res.render('electionform', {title: "Election Form", p_number});
 });
 
-router.post('/final', (req, res)=>{
+router.post('/final', ensureAuthenticated,(req, res)=>{
     var title = req.body.title;
     var body = req.body.body;
     var authorID = req.cookies['userData']._id;

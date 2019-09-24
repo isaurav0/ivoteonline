@@ -5,11 +5,11 @@
     </div>
 
     {{#each poll.panels}}
-    <div class="col-lg-5 col-lg-offset-3 panel panel-body">
+    <div class="col-lg-5 col-lg-offset-3 panel text-center panel-body">
         <h3>{{this.name}}</h3> <hr>
         {{#each this.candidates}}
             <div class="col-lg-5 col-lg-offset-3 center">
-                <form action="/poll/{{this.parentPoll}}/{{this._id}}" method="post">
+                <form action="/elections/{{this.parentPanel}}/{{this._id}}" method="post">
                 <button type="submit"  id='{{this._id}}' class='btn-success pull-right btn-block' method='post'>
                 <h4>{{this.name}}</h4>
                 </button>
@@ -17,7 +17,6 @@
             </form>
             </div>
             <br>
-            
         {{/each}}
     </div>
     {{/each}}
