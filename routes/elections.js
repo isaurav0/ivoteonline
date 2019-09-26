@@ -26,6 +26,12 @@ router.get('/:eid', ensureAuthenticated,(req, res) => {
     Poll.findById(eid).lean()
         .then(poll => {
             data['poll']=poll
+            if(Date.now()<poll.expireAt && Date.now()>poll.startAt){
+                data['poll'].running = true;
+            }
+            else{
+                data['poll'].running = false;
+            }
             Panel.find({parentPoll: eid}).lean()
                 .then(panels=>{
                     data['poll'].panels = panels;
@@ -112,7 +118,7 @@ router.post('/:pid/:cid', ensureAuthenticated,(req, res)=>{
                         }
                     }
 
-                    if (!voted) {
+                    if (!voted ) {
                         Candidate.findOneAndUpdate({ _id: cid }, { $push: { 'votedBy': userId } }, (err, cand) => {
                             message = 'You voted ' + cand.name;
                             console.log(message)

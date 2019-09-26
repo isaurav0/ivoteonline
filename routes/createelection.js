@@ -23,12 +23,14 @@ router.post('/final', ensureAuthenticated,(req, res)=>{
     var election = true;
     var total_panel = req.body.count;
     var voterList = req.body.voters;
+    var expireAt = Date.parse(req.body.expiry_date);
+    var startAt = Date.parse(req.body.start_date);
     // res.send(total_panel)
     // // expireAt = new Date(req.body.expiry_date);
     
 
     // //save poll
-    var newPoll = new Poll({title, body, authorID,election});
+    var newPoll = new Poll({title, body, authorID, election, expireAt, startAt});
     
     for(i in voterList){
         newPoll.voterList.push(voterList[i]);
