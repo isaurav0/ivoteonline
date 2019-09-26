@@ -3,6 +3,7 @@ var router = express.Router();
 var Poll = require('../models/poll');
 var Candidate = require('../models/candidate');
 var Panel = require('../models/panel.js');
+var transporter = require('../transporter');
 
 
 router.get('/' ,ensureAuthenticated,function (req, res) {
@@ -23,8 +24,10 @@ router.post('/final', ensureAuthenticated,(req, res)=>{
     var election = true;
     var total_panel = req.body.count;
     var voterList = req.body.voters;
-    var expireAt = Date.parse(req.body.expiry_date);
-    var startAt = Date.parse(req.body.start_date);
+    var expireAt =req.body.expiry_date;
+    var startAt =req.body.start_date;
+
+    
     // res.send(total_panel)
     // // expireAt = new Date(req.body.expiry_date);
     
@@ -37,8 +40,29 @@ router.post('/final', ensureAuthenticated,(req, res)=>{
     }
     newPoll
         .save()
-        .then(()=>{console.log("created new Poll")})
+        .then(()=>{
+            console.log("created new Poll");
+            Poll.find({title: title})
+                .then((poll)=>{
+                    console.log(p_id = poll._id)
+                    for( i in voterList){
+                        var mailOptions = {
+                            from: 'donotreplytothismailever@gmail.com',
+                            to: voterList[i],
+                            subject: 'Cast your vote',
+                            text: `You have been enlisted as a verified voter for upcoming election entitled "${title}" hosted in website https://localhost:300/elections . Please use your voting rights wisely. \n With Regards, \n iVoteOnline `
+                        };
+                
+                        transporter.sendMail(mailOptions, (err, info)=>{
+                            if(err) console.log(err);
+                            else console.log('Email sent: '+info.response)
+                        });
+                    }
+                })
+                .catch(err=>console.log(err))
+        })
         .catch(err=>res.redirect('/createelection'));
+
 
     for(i=0;i<total_panel; i++){
         var p_name = req.body["p_name"+i];

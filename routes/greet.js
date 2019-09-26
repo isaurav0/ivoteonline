@@ -9,12 +9,14 @@ router.get('/', function (req, res) {
 
 router.post('/', (req, res)=>{
     var expiry_date = req.body.expiry_date;
-    expireAt = Date.parse(expiry_date)
-    if(Date.now()>expireAt){
-        res.send('expired')
-    }
-    else
-        res.send('running')
+
+    res.send(expiry_date);
+//     expireAt = Date.parse(expiry_date)
+//     if(Date.now()>expireAt){
+//         res.send('expired')
+//     }
+//     else
+//         res.send('running')
 })
 
 module.exports = router;

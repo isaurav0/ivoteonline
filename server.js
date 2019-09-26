@@ -10,6 +10,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
 const chartjs = require('chart.js');
+const nodemailer = require('nodemailer');
 
 
 //database

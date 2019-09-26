@@ -9,7 +9,7 @@ var data = {
 };
 
 
-router.get('/', ensureAuthenticated,function (req, res) {
+router.get('/', ensureAuthenticated, function (req, res) {
     Poll.find({election: true})
         .then(data=>{
             res.render('election',{title:'Elections', data}); 
@@ -26,11 +26,19 @@ router.get('/:eid', ensureAuthenticated,(req, res) => {
     Poll.findById(eid).lean()
         .then(poll => {
             data['poll']=poll
-            if(Date.now()<poll.expireAt && Date.now()>poll.startAt){
+            if(Date.now()<Date.parse(poll.expireAt) && Date.now()>Date.parse(poll.startAt)){
                 data['poll'].running = true;
+                data['poll'].status = 'Ongoing';
+            }
+            else if(Date.now()<Date.parse(poll.startAt)){
+                data['poll'].running = false;
+                data['poll'].notstarted = true;
+                data['poll'].status = 'Not started';
             }
             else{
                 data['poll'].running = false;
+                data['poll'].status = 'Finished';
+                data['poll'].ended = true;                                
             }
             Panel.find({parentPoll: eid}).lean()
                 .then(panels=>{
@@ -76,12 +84,10 @@ router.get('/:eid', ensureAuthenticated,(req, res) => {
                                             for (j in data['poll'].panels[i].candidates) {                                                                                                                                            
                                                     data['poll'].panels[i].candidates[j].percent = Math.round(data['poll'].panels[i].candidates[j].votes / totalvotes * 100 * 100) / 100;                                                                                                                                                                                                
                                                 }                                                   
-                                            }                                            
-                                            
-                                        }   
-                                        
-                                        // res.send(data)
-                                        res.render('electionview',data)
+                                            }                                                                                        
+                                        }                                           
+                                        // res.send(candidates);
+                                        res.render('electionview',{title: 'Election', poll: poll, data: JSON.stringify(candidates) });
                                     }
 
                                 else{
@@ -118,7 +124,7 @@ router.post('/:pid/:cid', ensureAuthenticated,(req, res)=>{
                         }
                     }
 
-                    if (!voted ) {
+                    if (!voted) {
                         Candidate.findOneAndUpdate({ _id: cid }, { $push: { 'votedBy': userId } }, (err, cand) => {
                             message = 'You voted ' + cand.name;
                             console.log(message)
@@ -143,4 +149,7 @@ function ensureAuthenticated(req, res, next) {
         res.redirect('/greet');
     }
 }
+
+
+
 module.exports = router;
